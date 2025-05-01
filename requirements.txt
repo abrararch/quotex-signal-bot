@@ -1,0 +1,7 @@
+pyTelegramBotAPI
+numpy
+pandas
+requests
+python-dotenv
+pytz
+TA-Lib
