@@ -1,5 +1,6 @@
 name: Run Quotex Bot 24/7
 on:
+  workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
 jobs:
@@ -8,13 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # 1. Install system dependencies
+      # System dependencies
       - name: Install system packages
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential python3-dev wget
 
-      # 2. Install TA-Lib from source
+      # TA-Lib installation
       - name: Install TA-Lib
         run: |
           wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
@@ -24,17 +25,20 @@ jobs:
           make
           sudo make install
           cd ..
+          pip install TA-Lib
 
-      # 3. Set up Python and bot dependencies
+      # Python setup
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
+      # Install dependencies
       - name: Install Python packages
         run: |
           pip install -r requirements.txt
 
+      # Run bot
       - name: Run bot
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
